@@ -1,0 +1,4 @@
+# .cloudflare/pages.yml
+build:
+  command: "true"
+  output_directory: "."
