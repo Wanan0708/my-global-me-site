@@ -1,326 +1,443 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>完整元素周期表 - 118 元素</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-      background: #0f0f1a;
-      color: white;
-      margin: 0;
-      padding: 16px;
-      line-height: 1.4;
-    }
-    h1 {
-      text-align: center;
-      color: #64feda;
-      margin: 10px 0 20px;
-      font-size: 2.2rem;
-    }
-    .table {
-      display: grid;
-      grid-template-columns: repeat(18, 1fr);
-      gap: 6px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    .cell {
-      aspect-ratio: 1/1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.3s;
-      padding: 4px;
-      font-size: 0.85rem;
-      text-align: center;
-      color: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-      position: relative;
-    }
-    .cell:hover {
-      transform: scale(1.15);
-      z-index: 10;
-      box-shadow: 0 0 12px rgba(100,254,218,0.6);
-    }
-    .number { font-size: 0.7rem; opacity: 0.85; }
-    .symbol { font-size: 1.3rem; font-weight: bold; }
-    .name { font-size: 0.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    /* 元素类别配色 */
-    .alkali       { background: #ff6b6b; }       /* 碱金属 */
-    .alkaline     { background: #ff9f55; }       /* 碱土金属 */
-    .transition   { background: #4ecdc4; }       /* 过渡金属 */
-    .post-transition { background: #6a994e; }    /* 贫金属 */
-    .metalloid    { background: #ffd166; color: #333; } /* 类金属 */
-    .nonmetal     { background: #8ac926; }       /* 非金属 */
-    .halogen      { background: #ef476f; }       /* 卤素 */
-    .noble        { background: #118ab2; }       /* 惰性气体 */
-    .lanthanide   { background: #b57edc; }       /* 镧系 */
-    .actinide     { background: #f78c6b; }       /* 锕系 */
-    .placeholder  { background: transparent; border: 2px dashed #333; opacity: 0.3; }
-
-    .tooltip {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(15,15,30,0.96);
-      border: 2px solid #64feda;
-      border-radius: 12px;
-      padding: 22px 28px;
-      max-width: 420px;
-      width: 90%;
-      z-index: 1000;
-      box-shadow: 0 0 30px rgba(100,254,218,0.4);
-      backdrop-filter: blur(8px);
-      display: none;
-      font-size: 0.95rem;
-    }
-    .tooltip h2 {
-      color: #64feda;
-      margin: 0 0 12px;
-      font-size: 1.4rem;
-    }
-    .tooltip p {
-      margin: 6px 0;
-      display: flex;
-      justify-content: space-between;
-    }
-    .tooltip .key { font-weight: bold; color: #aaa; }
-    .close-btn {
-      position: absolute;
-      top: 12px;
-      right: 16px;
-      background: none;
-      border: none;
-      color: #aaa;
-      font-size: 1.4rem;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的彩色像素画板</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        header {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b, #86a8e7, #91eae4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+        
+        .instructions {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 25px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+        
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 3px solid transparent;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .color-option.active {
+            border-color: white;
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+        
+        .pixel-canvas {
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
+            gap: 2px;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 0 auto 30px;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .pixel {
+            aspect-ratio: 1 / 1;
+            background-color: #2a2a2a;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.1s, transform 0.05s;
+        }
+        
+        .pixel:hover {
+            transform: scale(1.08);
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .current-color {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .color-display {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            border: 2px solid white;
+        }
+        
+        footer {
+            margin-top: 30px;
+            padding: 20px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .pixel-canvas {
+                grid-template-columns: repeat(12, 1fr);
+                max-width: 360px;
+            }
+            
+            .color-option {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>⚛️ 完整元素周期表（118 元素）</h1>
-  <div class="table" id="periodicTable"></div>
+    <div class="container">
+        <header>
+            <h1>🎨 彩色像素画板</h1>
+            <p class="subtitle">点击选择颜色，然后在网格上绘制你的像素艺术！</p>
+        </header>
+        
+        <div class="instructions">
+            <p><strong>使用方法：</strong> 1. 从下方调色板选择颜色 2. 在网格上点击绘制 3. 使用右侧工具保存或清除</p>
+        </div>
+        
+        <div class="current-color">
+            <span>当前颜色：</span>
+            <div class="color-display" id="currentColorDisplay"></div>
+            <span id="currentColorName">亮红色</span>
+        </div>
+        
+        <div class="color-palette" id="colorPalette">
+            <!-- 颜色选项将通过JavaScript动态生成 -->
+        </div>
+        
+        <div class="pixel-canvas" id="pixelCanvas">
+            <!-- 像素网格将通过JavaScript动态生成 -->
+        </div>
+        
+        <div class="controls">
+            <button id="clearBtn">🧹 清除画板</button>
+            <button id="saveBtn">💾 保存图片</button>
+            <button id="randomBtn">🎲 随机图案</button>
+            <button id="toggleGridBtn">🔲 隐藏网格</button>
+        </div>
+        
+        <footer>
+            <p>使用纯HTML、CSS和JavaScript构建 | 已部署到Cloudflare Pages</p>
+            <p>提示：尝试绘制一个简单的图案，比如星星、爱心或你的名字首字母！</p>
+        </footer>
+    </div>
 
-  <div class="tooltip" id="tooltip">
-    <button class="close-btn" onclick="hideTooltip()">×</button>
-    <h2 id="tt-name">Hydrogen</h2>
-    <p><span class="key">原子序数:</span> <span id="tt-number"></span></p>
-    <p><span class="key">符号:</span> <span id="tt-symbol"></span></p>
-    <p><span class="key">原子量:</span> <span id="tt-weight"></span></p>
-    <p><span class="key">状态 (25°C):</span> <span id="tt-state"></span></p>
-    <p><span class="key">熔点:</span> <span id="tt-melt"></span></p>
-    <p><span class="key">沸点:</span> <span id="tt-boil"></span></p>
-    <p><span class="key">电子排布:</span> <span id="tt-config"></span></p>
-    <p><span class="key">类别:</span> <span id="tt-class"></span></p>
-  </div>
-
-  <script>
-    // 完整 118 元素数据（按周期表位置排布）
-    const elements = [
-      // 第1周期
-      { pos: [0,0],  name: "氢", en: "Hydrogen", symbol: "H", number: 1, weight: 1.008, state: "气", melt: "-259.14", boil: "-252.87", config: "1s¹", class: "nonmetal" },
-      { pos: [0,17], name: "氦", en: "Helium", symbol: "He", number: 2, weight: 4.0026, state: "气", melt: "–", boil: "-268.93", config: "1s²", class: "noble" },
-
-      // 第2周期
-      { pos: [1,0],  name: "锂", en: "Lithium", symbol: "Li", number: 3, weight: 6.94, state: "固", melt: "180.54", boil: "1342", config: "[He] 2s¹", class: "alkali" },
-      { pos: [1,1],  name: "铍", en: "Beryllium", symbol: "Be", number: 4, weight: 9.0122, state: "固", melt: "1287", boil: "2470", config: "[He] 2s²", class: "alkaline" },
-      { pos: [1,2],  name: "硼", en: "Boron", symbol: "B", number: 5, weight: 10.81, state: "固", melt: "2075", boil: "4000", config: "[He] 2s² 2p¹", class: "metalloid" },
-      { pos: [1,13], name: "碳", en: "Carbon", symbol: "C", number: 6, weight: 12.011, state: "固", melt: "3550", boil: "4827", config: "[He] 2s² 2p²", class: "nonmetal" },
-      { pos: [1,14], name: "氮", en: "Nitrogen", symbol: "N", number: 7, weight: 14.007, state: "气", melt: "-210.00", boil: "-195.79", config: "[He] 2s² 2p³", class: "nonmetal" },
-      { pos: [1,15], name: "氧", en: "Oxygen", symbol: "O", number: 8, weight: 15.999, state: "气", melt: "-218.79", boil: "-182.95", config: "[He] 2s² 2p⁴", class: "nonmetal" },
-      { pos: [1,16], name: "氟", en: "Fluorine", symbol: "F", number: 9, weight: 18.998, state: "气", melt: "-219.67", boil: "-188.11", config: "[He] 2s² 2p⁵", class: "halogen" },
-      { pos: [1,17], name: "氖", en: "Neon", symbol: "Ne", number: 10, weight: 20.180, state: "气", melt: "-248.59", boil: "-246.05", config: "[He] 2s² 2p⁶", class: "noble" },
-
-      // 第3周期
-      { pos: [2,0],  name: "钠", en: "Sodium", symbol: "Na", number: 11, weight: 22.990, state: "固", melt: "97.72", boil: "883", config: "[Ne] 3s¹", class: "alkali" },
-      { pos: [2,1],  name: "镁", en: "Magnesium", symbol: "Mg", number: 12, weight: 24.305, state: "固", melt: "650", boil: "1090", config: "[Ne] 3s²", class: "alkaline" },
-      { pos: [2,2],  name: "铝", en: "Aluminum", symbol: "Al", number: 13, weight: 26.982, state: "固", melt: "660.32", boil: "2519", config: "[Ne] 3s² 3p¹", class: "post-transition" },
-      { pos: [2,13], name: "硅", en: "Silicon", symbol: "Si", number: 14, weight: 28.085, state: "固", melt: "1414", boil: "3265", config: "[Ne] 3s² 3p²", class: "metalloid" },
-      { pos: [2,14], name: "磷", en: "Phosphorus", symbol: "P", number: 15, weight: 30.974, state: "固", melt: "44.15", boil: "280.5", config: "[Ne] 3s² 3p³", class: "nonmetal" },
-      { pos: [2,15], name: "硫", en: "Sulfur", symbol: "S", number: 16, weight: 32.06, state: "固", melt: "115.21", boil: "444.6", config: "[Ne] 3s² 3p⁴", class: "nonmetal" },
-      { pos: [2,16], name: "氯", en: "Chlorine", symbol: "Cl", number: 17, weight: 35.45, state: "气", melt: "-101.5", boil: "-34.04", config: "[Ne] 3s² 3p⁵", class: "halogen" },
-      { pos: [2,17], name: "氩", en: "Argon", symbol: "Ar", number: 18, weight: 39.948, state: "气", melt: "-189.34", boil: "-185.85", config: "[Ne] 3s² 3p⁶", class: "noble" },
-
-      // 第4周期
-      { pos: [3,0],  name: "钾", en: "Potassium", symbol: "K", number: 19, weight: 39.098, state: "固", melt: "63.5", boil: "759", config: "[Ar] 4s¹", class: "alkali" },
-      { pos: [3,1],  name: "钙", en: "Calcium", symbol: "Ca", number: 20, weight: 40.078, state: "固", melt: "842", boil: "1484", config: "[Ar] 4s²", class: "alkaline" },
-      { pos: [3,2],  name: "钪", en: "Scandium", symbol: "Sc", number: 21, weight: 44.956, state: "固", melt: "1541", boil: "2836", config: "[Ar] 3d¹ 4s²", class: "transition" },
-      { pos: [3,3],  name: "钛", en: "Titanium", symbol: "Ti", number: 22, weight: 47.867, state: "固", melt: "1668", boil: "3287", config: "[Ar] 3d² 4s²", class: "transition" },
-      { pos: [3,4],  name: "钒", en: "Vanadium", symbol: "V", number: 23, weight: 50.942, state: "固", melt: "1910", boil: "3407", config: "[Ar] 3d³ 4s²", class: "transition" },
-      { pos: [3,5],  name: "铬", en: "Chromium", symbol: "Cr", number: 24, weight: 51.996, state: "固", melt: "1907", boil: "2671", config: "[Ar] 3d⁵ 4s¹", class: "transition" },
-      { pos: [3,6],  name: "锰", en: "Manganese", symbol: "Mn", number: 25, weight: 54.938, state: "固", melt: "1246", boil: "2061", config: "[Ar] 3d⁵ 4s²", class: "transition" },
-      { pos: [3,7],  name: "铁", en: "Iron", symbol: "Fe", number: 26, weight: 55.845, state: "固", melt: "1538", boil: "2862", config: "[Ar] 3d⁶ 4s²", class: "transition" },
-      { pos: [3,8],  name: "钴", en: "Cobalt", symbol: "Co", number: 27, weight: 58.933, state: "固", melt: "1495", boil: "2927", config: "[Ar] 3d⁷ 4s²", class: "transition" },
-      { pos: [3,9],  name: "镍", en: "Nickel", symbol: "Ni", number: 28, weight: 58.693, state: "固", melt: "1455", boil: "2913", config: "[Ar] 3d⁸ 4s²", class: "transition" },
-      { pos: [3,10], name: "铜", en: "Copper", symbol: "Cu", number: 29, weight: 63.546, state: "固", melt: "1084.62", boil: "2562", config: "[Ar] 3d¹⁰ 4s¹", class: "transition" },
-      { pos: [3,11], name: "锌", en: "Zinc", symbol: "Zn", number: 30, weight: 65.38, state: "固", melt: "419.53", boil: "907", config: "[Ar] 3d¹⁰ 4s²", class: "transition" },
-      { pos: [3,12], name: "镓", en: "Gallium", symbol: "Ga", number: 31, weight: 69.723, state: "固", melt: "29.76", boil: "2204", config: "[Ar] 3d¹⁰ 4s² 4p¹", class: "post-transition" },
-      { pos: [3,13], name: "锗", en: "Germanium", symbol: "Ge", number: 32, weight: 72.630, state: "固", melt: "938.25", boil: "2833", config: "[Ar] 3d¹⁰ 4s² 4p²", class: "metalloid" },
-      { pos: [3,14], name: "砷", en: "Arsenic", symbol: "As", number: 33, weight: 74.922, state: "固", melt: "817 (36 atm)", boil: "614", config: "[Ar] 3d¹⁰ 4s² 4p³", class: "metalloid" },
-      { pos: [3,15], name: "硒", en: "Selenium", symbol: "Se", number: 34, weight: 78.971, state: "固", melt: "221", boil: "685", config: "[Ar] 3d¹⁰ 4s² 4p⁴", class: "nonmetal" },
-      { pos: [3,16], name: "溴", en: "Bromine", symbol: "Br", number: 35, weight: 79.904, state: "液", melt: "-7.2", boil: "58.8", config: "[Ar] 3d¹⁰ 4s² 4p⁵", class: "halogen" },
-      { pos: [3,17], name: "氪", en: "Krypton", symbol: "Kr", number: 36, weight: 83.798, state: "气", melt: "-157.36", boil: "-153.22", config: "[Ar] 3d¹⁰ 4s² 4p⁶", class: "noble" },
-
-      // 第5周期
-      { pos: [4,0],  name: "铷", en: "Rubidium", symbol: "Rb", number: 37, weight: 85.468, state: "固", melt: "39.31", boil: "688", config: "[Kr] 5s¹", class: "alkali" },
-      { pos: [4,1],  name: "锶", en: "Strontium", symbol: "Sr", number: 38, weight: 87.62, state: "固", melt: "777", boil: "1382", config: "[Kr] 5s²", class: "alkaline" },
-      { pos: [4,2],  name: "钇", en: "Yttrium", symbol: "Y", number: 39, weight: 88.906, state: "固", melt: "1522", boil: "3345", config: "[Kr] 4d¹ 5s²", class: "transition" },
-      { pos: [4,3],  name: "锆", en: "Zirconium", symbol: "Zr", number: 40, weight: 91.224, state: "固", melt: "1855", boil: "4409", config: "[Kr] 4d² 5s²", class: "transition" },
-      { pos: [4,4],  name: "铌", en: "Niobium", symbol: "Nb", number: 41, weight: 92.906, state: "固", melt: "2477", boil: "4744", config: "[Kr] 4d⁴ 5s¹", class: "transition" },
-      { pos: [4,5],  name: "钼", en: "Molybdenum", symbol: "Mo", number: 42, weight: 95.95, state: "固", melt: "2623", boil: "4639", config: "[Kr] 4d⁵ 5s¹", class: "transition" },
-      { pos: [4,6],  name: "锝", en: "Technetium", symbol: "Tc", number: 43, weight: 98, state: "固", melt: "2157", boil: "4265", config: "[Kr] 4d⁵ 5s²", class: "transition" },
-      { pos: [4,7],  name: "钌", en: "Ruthenium", symbol: "Ru", number: 44, weight: 101.07, state: "固", melt: "2334", boil: "4150", config: "[Kr] 4d⁷ 5s¹", class: "transition" },
-      { pos: [4,8],  name: "铑", en: "Rhodium", symbol: "Rh", number: 45, weight: 102.91, state: "固", melt: "1964", boil: "3695", config: "[Kr] 4d⁸ 5s¹", class: "transition" },
-      { pos: [4,9],  name: "钯", en: "Palladium", symbol: "Pd", number: 46, weight: 106.42, state: "固", melt: "1554.9", boil: "2963", config: "[Kr] 4d¹⁰", class: "transition" },
-      { pos: [4,10], name: "银", en: "Silver", symbol: "Ag", number: 47, weight: 107.87, state: "固", melt: "961.78", boil: "2162", config: "[Kr] 4d¹⁰ 5s¹", class: "transition" },
-      { pos: [4,11], name: "镉", en: "Cadmium", symbol: "Cd", number: 48, weight: 112.41, state: "固", melt: "321.07", boil: "767", config: "[Kr] 4d¹⁰ 5s²", class: "transition" },
-      { pos: [4,12], name: "铟", en: "Indium", symbol: "In", number: 49, weight: 114.82, state: "固", melt: "156.60", boil: "2072", config: "[Kr] 4d¹⁰ 5s² 5p¹", class: "post-transition" },
-      { pos: [4,13], name: "锡", en: "Tin", symbol: "Sn", number: 50, weight: 118.71, state: "固", melt: "231.93", boil: "2602", config: "[Kr] 4d¹⁰ 5s² 5p²", class: "post-transition" },
-      { pos: [4,14], name: "锑", en: "Antimony", symbol: "Sb", number: 51, weight: 121.76, state: "固", melt: "630.63", boil: "1587", config: "[Kr] 4d¹⁰ 5s² 5p³", class: "metalloid" },
-      { pos: [4,15], name: "碲", en: "Tellurium", symbol: "Te", number: 52, weight: 127.60, state: "固", melt: "449.51", boil: "988", config: "[Kr] 4d¹⁰ 5s² 5p⁴", class: "metalloid" },
-      { pos: [4,16], name: "碘", en: "Iodine", symbol: "I", number: 53, weight: 126.90, state: "固", melt: "113.7", boil: "184.3", config: "[Kr] 4d¹⁰ 5s² 5p⁵", class: "halogen" },
-      { pos: [4,17], name: "氙", en: "Xenon", symbol: "Xe", number: 54, weight: 131.29, state: "气", melt: "-111.75", boil: "-108.0", config: "[Kr] 4d¹⁰ 5s² 5p⁶", class: "noble" },
-
-      // 第6周期
-      { pos: [5,0],  name: "铯", en: "Caesium", symbol: "Cs", number: 55, weight: 132.91, state: "固", melt: "28.44", boil: "671", config: "[Xe] 6s¹", class: "alkali" },
-      { pos: [5,1],  name: "钡", en: "Barium", symbol: "Ba", number: 56, weight: 137.33, state: "固", melt: "727", boil: "1897", config: "[Xe] 6s²", class: "alkaline" },
-      // 镧系占位
-      { pos: [5,2],  name: "镧", en: "Lanthanum", symbol: "La", number: 57, weight: 138.91, state: "固", melt: "920", boil: "3464", config: "[Xe] 5d¹ 6s²", class: "lanthanide" },
-      { pos: [5,3],  name: "铈", en: "Cerium", symbol: "Ce", number: 58, weight: 140.12, state: "固", melt: "795", boil: "3443", config: "[Xe] 4f¹ 5d¹ 6s²", class: "lanthanide" },
-      { pos: [5,4],  name: "镨", en: "Praseodymium", symbol: "Pr", number: 59, weight: 140.91, state: "固", melt: "935", boil: "3520", config: "[Xe] 4f³ 6s²", class: "lanthanide" },
-      { pos: [5,5],  name: "钕", en: "Neodymium", symbol: "Nd", number: 60, weight: 144.24, state: "固", melt: "1024", boil: "3074", config: "[Xe] 4f⁴ 6s²", class: "lanthanide" },
-      { pos: [5,6],  name: "钷", en: "Promethium", symbol: "Pm", number: 61, weight: 145, state: "固", melt: "1042", boil: "3000", config: "[Xe] 4f⁵ 6s²", class: "lanthanide" },
-      { pos: [5,7],  name: "钐", en: "Samarium", symbol: "Sm", number: 62, weight: 150.36, state: "固", melt: "1072", boil: "1794", config: "[Xe] 4f⁶ 6s²", class: "lanthanide" },
-      { pos: [5,8],  name: "铕", en: "Europium", symbol: "Eu", number: 63, weight: 151.96, state: "固", melt: "826", boil: "1529", config: "[Xe] 4f⁷ 6s²", class: "lanthanide" },
-      { pos: [5,9],  name: "钆", en: "Gadolinium", symbol: "Gd", number: 64, weight: 157.25, state: "固", melt: "1312", boil: "3273", config: "[Xe] 4f⁷ 5d¹ 6s²", class: "lanthanide" },
-      { pos: [5,10], name: "铽", en: "Terbium", symbol: "Tb", number: 65, weight: 158.93, state: "固", melt: "1356", boil: "3230", config: "[Xe] 4f⁹ 6s²", class: "lanthanide" },
-      { pos: [5,11], name: "镝", en: "Dysprosium", symbol: "Dy", number: 66, weight: 162.50, state: "固", melt: "1412", boil: "2567", config: "[Xe] 4f¹⁰ 6s²", class: "lanthanide" },
-      { pos: [5,12], name: "钬", en: "Holmium", symbol: "Ho", number: 67, weight: 164.93, state: "固", melt: "1474", boil: "2700", config: "[Xe] 4f¹¹ 6s²", class: "lanthanide" },
-      { pos: [5,13], name: "铒", en: "Erbium", symbol: "Er", number: 68, weight: 167.26, state: "固", melt: "1529", boil: "2868", config: "[Xe] 4f¹² 6s²", class: "lanthanide" },
-      { pos: [5,14], name: "铥", en: "Thulium", symbol: "Tm", number: 69, weight: 168.93, state: "固", melt: "1545", boil: "1950", config: "[Xe] 4f¹³ 6s²", class: "lanthanide" },
-      { pos: [5,15], name: "镱", en: "Ytterbium", symbol: "Yb", number: 70, weight: 173.05, state: "固", melt: "819", boil: "1196", config: "[Xe] 4f¹⁴ 6s²", class: "lanthanide" },
-      { pos: [5,16], name: "镥", en: "Lutetium", symbol: "Lu", number: 71, weight: 174.97, state: "固", melt: "1663", boil: "3402", config: "[Xe] 4f¹⁴ 5d¹ 6s²", class: "lanthanide" },
-      { pos: [5,17], name: "铪", en: "Hafnium", symbol: "Hf", number: 72, weight: 178.49, state: "固", melt: "2233", boil: "4603", config: "[Xe] 4f¹⁴ 5d² 6s²", class: "transition" },
-      { pos: [5,18], name: "钽", en: "Tantalum", symbol: "Ta", number: 73, weight: 180.95, state: "固", melt: "3017", boil: "5458", config: "[Xe] 4f¹⁴ 5d³ 6s²", class: "transition" },
-      { pos: [5,19], name: "钨", en: "Tungsten", symbol: "W", number: 74, weight: 183.84, state: "固", melt: "3422", boil: "5930", config: "[Xe] 4f¹⁴ 5d⁴ 6s²", class: "transition" },
-      { pos: [5,20], name: "铼", en: "Rhenium", symbol: "Re", number: 75, weight: 186.21, state: "固", melt: "3186", boil: "5596", config: "[Xe] 4f¹⁴ 5d⁵ 6s²", class: "transition" },
-      { pos: [5,21], name: "锇", en: "Osmium", symbol: "Os", number: 76, weight: 190.23, state: "固", melt: "3033", boil: "5012", config: "[Xe] 4f¹⁴ 5d⁶ 6s²", class: "transition" },
-      { pos: [5,22], name: "铱", en: "Iridium", symbol: "Ir", number: 77, weight: 192.22, state: "固", melt: "2466", boil: "4428", config: "[Xe] 4f¹⁴ 5d⁷ 6s²", class: "transition" },
-      { pos: [5,23], name: "铂", en: "Platinum", symbol: "Pt", number: 78, weight: 195.08, state: "固", melt: "1768.3", boil: "3825", config: "[Xe] 4f¹⁴ 5d⁹ 6s¹", class: "transition" },
-      { pos: [5,24], name: "金", en: "Gold", symbol: "Au", number: 79, weight: 196.97, state: "固", melt: "1064.18", boil: "2856", config: "[Xe] 4f¹⁴ 5d¹⁰ 6s¹", class: "transition" },
-      { pos: [5,25], name: "汞", en: "Mercury", symbol: "Hg", number: 80, weight: 200.59, state: "液", melt: "-38.83", boil: "356.73", config: "[Xe] 4f¹⁴ 5d¹⁰ 6s²", class: "transition" },
-      { pos: [5,26], name: "铊", en: "Thallium", symbol: "Tl", number: 81, weight: 204.38, state: "固", melt: "304", boil: "1473", config: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p¹", class: "post-transition" },
-      { pos: [5,27], name: "铅", en: "Lead", symbol: "Pb", number: 82, weight: 207.2, state: "固", melt: "327.46", boil: "1749", config: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p²", class: "post-transition" },
-      { pos: [5,28], name: "铋", en: "Bismuth", symbol: "Bi", number: 83, weight: 208.98, state: "固", melt: "271.5", boil: "1564", config: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p³", class: "post-transition" },
-      { pos: [5,29], name: "钋", en: "Polonium", symbol: "Po", number: 84, weight: 209, state: "固", melt: "254", boil: "962", config: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴", class: "metalloid" },
-      { pos: [5,30], name: "砹", en: "Astatine", symbol: "At", number: 85, weight: 210, state: "固", melt: "302", boil: "337", config: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵", class: "halogen" },
-      { pos: [5,31], name: "氡", en: "Radon", symbol: "Rn", number: 86, weight: 222, state: "气", melt: "-71", boil: "-61.8", config: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶", class: "noble" },
-
-      // 第7周期
-      { pos: [6,0],  name: "钫", en: "Francium", symbol: "Fr", number: 87, weight: 223, state: "固", melt: "27", boil: "677", config: "[Rn] 7s¹", class: "alkali" },
-      { pos: [6,1],  name: "镭", en: "Radium", symbol: "Ra", number: 88, weight: 226, state: "固", melt: "700", boil: "1737", config: "[Rn] 7s²", class: "alkaline" },
-      // 锕系
-      { pos: [6,2],  name: "锕", en: "Actinium", symbol: "Ac", number: 89, weight: 227, state: "固", melt: "1050", boil: "3200", config: "[Rn] 6d¹ 7s²", class: "actinide" },
-      { pos: [6,3],  name: "钍", en: "Thorium", symbol: "Th", number: 90, weight: 232.04, state: "固", melt: "1750", boil: "4788", config: "[Rn] 6d² 7s²", class: "actinide" },
-      { pos: [6,4],  name: "镤", en: "Protactinium", symbol: "Pa", number: 91, weight: 231.04, state: "固", melt: "1572", boil: "4000", config: "[Rn] 5f² 6d¹ 7s²", class: "actinide" },
-      { pos: [6,5],  name: "铀", en: "Uranium", symbol: "U", number: 92, weight: 238.03, state: "固", melt: "1135", boil: "4131", config: "[Rn] 5f³ 6d¹ 7s²", class: "actinide" },
-      { pos: [6,6],  name: "镎", en: "Neptunium", symbol: "Np", number: 93, weight: 237, state: "固", melt: "637", boil: "4000", config: "[Rn] 5f⁴ 6d¹ 7s²", class: "actinide" },
-      { pos: [6,7],  name: "钚", en: "Plutonium", symbol: "Pu", number: 94, weight: 244, state: "固", melt: "640", boil: "3228", config: "[Rn] 5f⁶ 7s²", class: "actinide" },
-      { pos: [6,8],  name: "镅", en: "Americium", symbol: "Am", number: 95, weight: 243, state: "固", melt: "1146", boil: "2607", config: "[Rn] 5f⁷ 7s²", class: "actinide" },
-      { pos: [6,9],  name: "锔", en: "Curium", symbol: "Cm", number: 96, weight: 247, state: "固", melt: "1340", boil: "3110", config: "[Rn] 5f⁷ 6d¹ 7s²", class: "actinide" },
-      { pos: [6,10], name: "锫", en: "Berkelium", symbol: "Bk", number: 97, weight: 247, state: "固", melt: "986", boil: "2627", config: "[Rn] 5f⁹ 7s²", class: "actinide" },
-      { pos: [6,11], name: "锎", en: "Californium", symbol: "Cf", number: 98, weight: 251, state: "固", melt: "900", boil: "1470", config: "[Rn] 5f¹⁰ 7s²", class: "actinide" },
-      { pos: [6,12], name: "锿", en: "Einsteinium", symbol: "Es", number: 99, weight: 252, state: "固", melt: "860", boil: "–", config: "[Rn] 5f¹¹ 7s²", class: "actinide" },
-      { pos: [6,13], name: "镄", en: "Fermium", symbol: "Fm", number: 100, weight: 257, state: "固", melt: "1527", boil: "–", config: "[Rn] 5f¹² 7s²", class: "actinide" },
-      { pos: [6,14], name: "钔", en: "Mendelevium", symbol: "Md", number: 101, weight: 258, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹³ 7s²", class: "actinide" },
-      { pos: [6,15], name: "锘", en: "Nobelium", symbol: "No", number: 102, weight: 259, state: "固", melt: "827", boil: "–", config: "[Rn] 5f¹⁴ 7s²", class: "actinide" },
-      { pos: [6,16], name: "铹", en: "Lawrencium", symbol: "Lr", number: 103, weight: 266, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 7s² 7p¹", class: "actinide" },
-      { pos: [6,17], name: "𬬻", en: "Rutherfordium", symbol: "Rf", number: 104, weight: 267, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d² 7s²", class: "transition" },
-      { pos: [6,18], name: "𬭊", en: "Dubnium", symbol: "Db", number: 105, weight: 268, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d³ 7s²", class: "transition" },
-      { pos: [6,19], name: "𬭳", en: "Seaborgium", symbol: "Sg", number: 106, weight: 269, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d⁴ 7s²", class: "transition" },
-      { pos: [6,20], name: "𬭛", en: "Bohrium", symbol: "Bh", number: 107, weight: 270, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d⁵ 7s²", class: "transition" },
-      { pos: [6,21], name: "𬭶", en: "Hassium", symbol: "Hs", number: 108, weight: 277, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d⁶ 7s²", class: "transition" },
-      { pos: [6,22], name: "鿏", en: "Meitnerium", symbol: "Mt", number: 109, weight: 278, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d⁷ 7s²", class: "transition" },
-      { pos: [6,23], name: "𫟼", en: "Darmstadtium", symbol: "Ds", number: 110, weight: 281, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d⁸ 7s²", class: "transition" },
-      { pos: [6,24], name: "𬬭", en: "Roentgenium", symbol: "Rg", number: 111, weight: 282, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d⁹ 7s²", class: "transition" },
-      { pos: [6,25], name: "鎶", en: "Copernicium", symbol: "Cn", number: 112, weight: 285, state: "液", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d¹⁰ 7s²", class: "transition" },
-      { pos: [6,26], name: "鿭", en: "Nihonium", symbol: "Nh", number: 113, weight: 286, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p¹", class: "post-transition" },
-      { pos: [6,27], name: "𫓧", en: "Flerovium", symbol: "Fl", number: 114, weight: 289, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p²", class: "post-transition" },
-      { pos: [6,28], name: "镆", en: "Moscovium", symbol: "Mc", number: 115, weight: 290, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p³", class: "post-transition" },
-      { pos: [6,29], name: "𫟷", en: "Livermorium", symbol: "Lv", number: 116, weight: 293, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁴", class: "post-transition" },
-      { pos: [6,30], name: "鿬", en: "Tennessine", symbol: "Ts", number: 117, weight: 294, state: "固", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁵", class: "halogen" },
-      { pos: [6,31], name: "鿫", en: "Oganesson", symbol: "Og", number: 118, weight: 294, state: "气", melt: "–", boil: "–", config: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁶", class: "noble" }
-    ];
-
-    const table = document.getElementById('periodicTable');
-    const tooltip = document.getElementById('tooltip');
-
-    // 创建 7 行 × 32 列（实际用到18列，但镧系/锕系占额外位置）
-    const grid = Array(7).fill().map(() => Array(32).fill(null));
-
-    // 放入元素
-    elements.forEach(el => {
-      const [row, rawCol] = el.pos;
-      let col = rawCol;
-      if (row === 5 && rawCol >= 2) col = rawCol + 14; // 镧系从第17列开始
-      if (row === 6 && rawCol >= 2) col = rawCol + 14; // 锕系
-      if (col < 32) grid[row][col] = el;
-    });
-
-    // 渲染主表（7行×18列）
-    for (let r = 0; r < 7; r++) {
-      for (let c = 0; c < 18; c++) {
-        const cell = document.createElement('div');
-        const el = grid[r][c];
-        if (el) {
-          cell.className = `cell ${el.class}`;
-          cell.innerHTML = `
-            <div class="number">${el.number}</div>
-            <div class="symbol">${el.symbol}</div>
-            <div class="name">${el.name}</div>
-          `;
-          cell.onclick = () => showTooltip(el);
-        } else {
-          cell.className = 'cell placeholder';
+    <script>
+        // 颜色配置
+        const colors = [
+            { name: "亮红色", value: "#FF6B6B" },
+            { name: "橙黄色", value: "#FFA726" },
+            { name: "柠檬黄", value: "#FFEE58" },
+            { name: "嫩绿色", value: "#9CCC65" },
+            { name: "天空蓝", value: "#4FC3F7" },
+            { name: "深蓝色", value: "#5C6BC0" },
+            { name: "紫色", value: "#AB47BC" },
+            { name: "粉色", value: "#F48FB1" },
+            { name: "白色", value: "#FFFFFF" },
+            { name: "黑色", value: "#000000" },
+            { name: "棕色", value: "#8D6E63" },
+            { name: "灰色", value: "#BDBDBD" }
+        ];
+        
+        // 当前选中的颜色
+        let currentColor = colors[0].value;
+        let currentColorName = colors[0].name;
+        
+        // 网格尺寸
+        const gridSize = 16;
+        
+        // 初始化函数
+        function init() {
+            // 初始化颜色面板
+            const colorPalette = document.getElementById('colorPalette');
+            colors.forEach(color => {
+                const colorOption = document.createElement('div');
+                colorOption.className = 'color-option';
+                colorOption.style.backgroundColor = color.value;
+                colorOption.dataset.color = color.value;
+                colorOption.dataset.name = color.name;
+                
+                // 点击选择颜色
+                colorOption.addEventListener('click', () => {
+                    selectColor(color.value, color.name);
+                    
+                    // 移除所有颜色的active类
+                    document.querySelectorAll('.color-option').forEach(option => {
+                        option.classList.remove('active');
+                    });
+                    
+                    // 为当前选中的颜色添加active类
+                    colorOption.classList.add('active');
+                });
+                
+                colorPalette.appendChild(colorOption);
+            });
+            
+            // 默认选中第一个颜色
+            document.querySelector('.color-option').classList.add('active');
+            
+            // 初始化像素网格
+            const pixelCanvas = document.getElementById('pixelCanvas');
+            
+            // 如果是小屏幕，使用12x12网格
+            const actualGridSize = window.innerWidth <= 600 ? 12 : gridSize;
+            pixelCanvas.style.gridTemplateColumns = `repeat(${actualGridSize}, 1fr)`;
+            
+            // 创建像素
+            for (let i = 0; i < actualGridSize * actualGridSize; i++) {
+                const pixel = document.createElement('div');
+                pixel.className = 'pixel';
+                pixel.dataset.index = i;
+                
+                // 点击绘制像素
+                pixel.addEventListener('click', () => {
+                    pixel.style.backgroundColor = currentColor;
+                    // 添加一点动画效果
+                    pixel.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        pixel.style.transform = '';
+                    }, 100);
+                });
+                
+                // 支持鼠标拖拽绘制
+                let isDrawing = false;
+                pixel.addEventListener('mousedown', () => {
+                    isDrawing = true;
+                    pixel.style.backgroundColor = currentColor;
+                });
+                
+                pixel.addEventListener('mouseover', () => {
+                    if (isDrawing) {
+                        pixel.style.backgroundColor = currentColor;
+                        pixel.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            pixel.style.transform = '';
+                        }, 100);
+                    }
+                });
+                
+                pixelCanvas.appendChild(pixel);
+            }
+            
+            // 鼠标松开时停止绘制
+            document.addEventListener('mouseup', () => {
+                isDrawing = false;
+            });
+            
+            // 更新当前颜色显示
+            updateCurrentColorDisplay();
+            
+            // 初始化按钮事件
+            initButtons(actualGridSize);
         }
-        table.appendChild(cell);
-      }
-    }
-
-    function showTooltip(el) {
-      document.getElementById('tt-name').textContent = `${el.name} (${el.en})`;
-      document.getElementById('tt-number').textContent = el.number;
-      document.getElementById('tt-symbol').textContent = el.symbol;
-      document.getElementById('tt-weight').textContent = el.weight;
-      document.getElementById('tt-state').textContent = el.state;
-      document.getElementById('tt-melt').textContent = el.melt === '–' ? '–' : el.melt + '°C';
-      document.getElementById('tt-boil').textContent = el.boil === '–' ? '–' : el.boil + '°C';
-      document.getElementById('tt-config').textContent = el.config;
-      const classMap = {
-        alkali: '碱金属', alkaline: '碱土金属', transition: '过渡金属',
-        post-transition: '贫金属', metalloid: '类金属', nonmetal: '非金属',
-        halogen: '卤素', noble: '惰性气体', lanthanide: '镧系', actinide: '锕系'
-      };
-      document.getElementById('tt-class').textContent = classMap[el.class] || el.class;
-      tooltip.style.display = 'block';
-    }
-
-    function hideTooltip() {
-      tooltip.style.display = 'none';
-    }
-
-    document.addEventListener('click', (e) => {
-      if (!tooltip.contains(e.target) && !e.target.closest('.cell')) {
-        hideTooltip();
-      }
-    });
-  </script>
+        
+        // 选择颜色
+        function selectColor(color, name) {
+            currentColor = color;
+            currentColorName = name;
+            updateCurrentColorDisplay();
+        }
+        
+        // 更新当前颜色显示
+        function updateCurrentColorDisplay() {
+            const colorDisplay = document.getElementById('currentColorDisplay');
+            const colorName = document.getElementById('currentColorName');
+            
+            colorDisplay.style.backgroundColor = currentColor;
+            colorName.textContent = currentColorName;
+        }
+        
+        // 初始化按钮功能
+        function initButtons(gridSize) {
+            // 清除画板
+            document.getElementById('clearBtn').addEventListener('click', () => {
+                const pixels = document.querySelectorAll('.pixel');
+                pixels.forEach(pixel => {
+                    pixel.style.backgroundColor = '';
+                });
+            });
+            
+            // 保存图片
+            document.getElementById('saveBtn').addEventListener('click', saveImage);
+            
+            // 随机图案
+            document.getElementById('randomBtn').addEventListener('click', () => {
+                const pixels = document.querySelectorAll('.pixel');
+                pixels.forEach(pixel => {
+                    // 20%的几率填充颜色
+                    if (Math.random() < 0.2) {
+                        const randomColor = colors[Math.floor(Math.random() * colors.length)].value;
+                        pixel.style.backgroundColor = randomColor;
+                    } else {
+                        pixel.style.backgroundColor = '';
+                    }
+                });
+            });
+            
+            // 切换网格显示
+            let gridVisible = true;
+            document.getElementById('toggleGridBtn').addEventListener('click', () => {
+                const pixels = document.querySelectorAll('.pixel');
+                const button = document.getElementById('toggleGridBtn');
+                
+                if (gridVisible) {
+                    pixels.forEach(pixel => {
+                        pixel.style.borderRadius = '0';
+                        pixel.style.border = '0.5px solid #222';
+                    });
+                    button.textContent = '🔳 显示网格';
+                    gridVisible = false;
+                } else {
+                    pixels.forEach(pixel => {
+                        pixel.style.borderRadius = '3px';
+                        pixel.style.border = '';
+                    });
+                    button.textContent = '🔲 隐藏网格';
+                    gridVisible = true;
+                }
+            });
+        }
+        
+        // 保存图片功能
+        function saveImage() {
+            // 创建临时canvas来绘制像素画
+            const pixelCanvas = document.getElementById('pixelCanvas');
+            const pixels = document.querySelectorAll('.pixel');
+            const gridSize = Math.sqrt(pixels.length);
+            
+            // 创建canvas元素
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // 设置canvas尺寸（每个像素放大10倍）
+            const pixelSize = 20;
+            canvas.width = gridSize * pixelSize;
+            canvas.height = gridSize * pixelSize;
+            
+            // 绘制背景
+            ctx.fillStyle = '#333';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制每个像素
+            pixels.forEach((pixel, index) => {
+                const row = Math.floor(index / gridSize);
+                const col = index % gridSize;
+                const color = pixel.style.backgroundColor || '#2a2a2a';
+                
+                ctx.fillStyle = color;
+                ctx.fillRect(col * pixelSize, row * pixelSize, pixelSize, pixelSize);
+            });
+            
+            // 创建下载链接
+            const link = document.createElement('a');
+            link.download = '我的像素画.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            // 提示用户
+            alert('图片已保存为"我的像素画.png"！');
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
